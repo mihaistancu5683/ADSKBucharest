@@ -10,20 +10,20 @@ const transporter = nodemailer.createTransport({
 });
 
 /**
- * GET /contact
- * Contact form page.
+ * GET /bookparking
+ * Book parking form page.
  */
-export let getContact = (req: Request, res: Response) => {
-  res.render("contact", {
-    title: "Contact"
+export let getBookings = (req: Request, res: Response) => {
+  res.render("parking", {
+    title: "Book parking spot"
   });
 };
 
 /**
- * POST /contact
- * Send a contact form via Nodemailer.
+ * POST /bookparking
+ * Send a bookparking form via Nodemailer.
  */
-export let postContact = (req: Request, res: Response) => {
+export let postBooking = (req: Request, res: Response) => {
   req.assert("name", "Name cannot be blank").notEmpty();
   req.assert("email", "Email is not valid").isEmail();
   req.assert("message", "Message cannot be blank").notEmpty();
@@ -32,22 +32,22 @@ export let postContact = (req: Request, res: Response) => {
 
   if (errors) {
     req.flash("errors", errors);
-    return res.redirect("/contact");
+    return res.redirect("/bookparking");
   }
 
   const mailOptions = {
     to: "your@email.com",
     from: `${req.body.name} <${req.body.email}>`,
-    subject: "Contact Form",
+    subject: "Booking Form",
     text: req.body.message
   };
 
   transporter.sendMail(mailOptions, (err) => {
     if (err) {
       req.flash("errors", { msg: err.message });
-      return res.redirect("/contact");
+      return res.redirect("/bookparking");
     }
     req.flash("success", { msg: "Email has been sent successfully!" });
-    res.redirect("/contact");
+    res.redirect("/bookparking");
   });
 };

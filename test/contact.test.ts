@@ -4,17 +4,17 @@ import app from "../src/app";
 const chai = require("chai");
 const expect = chai.expect;
 
-describe("GET /contact", () => {
+describe("GET /bookparking", () => {
   it("should return 200 OK", (done) => {
-    request(app).get("/contact")
+    request(app).get("/bookparking")
       .expect(200, done);
   });
 });
 
 
-describe("POST /contact", () => {
+describe("POST /bookparking", () => {
   it("should return false from assert when no message is found", (done) => {
-    request(app).post("/contact")
+    request(app).post("/bookparking")
       .field("name", "John Doe")
       .field("email", "john@me.com")
       .end(function(err, res) {

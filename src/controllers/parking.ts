@@ -1,53 +1,49 @@
 import nodemailer from "nodemailer";
-import { Request, Response } from "express";
-
-const transporter = nodemailer.createTransport({
-  service: "SendGrid",
-  auth: {
-    user: process.env.SENDGRID_USER,
-    pass: process.env.SENDGRID_PASSWORD
-  }
-});
+import { Request, Response, NextFunction } from "express";
+import { default as Parking, ParkingModel } from "../models/Parking";
+import { WriteError } from "mongodb";
 
 /**
  * GET /bookparking
  * Book parking form page.
  */
 export let getBookings = (req: Request, res: Response) => {
-  res.render("parking", {
-    title: "Book parking spot"
+  // if (req.user) {
+  //   return res.redirect("/");
+  // }
+
+  Parking.find({}, (err, alldata) => {
+    res.render("parking", {
+      title: "Book parking spot",
+      content: alldata
+    });
   });
 };
 
 /**
  * POST /bookparking
- * Send a bookparking form via Nodemailer.
+ * Send a bookparking to db.
  */
-export let postBooking = (req: Request, res: Response) => {
-  req.assert("name", "Name cannot be blank").notEmpty();
-  req.assert("email", "Email is not valid").isEmail();
-  req.assert("message", "Message cannot be blank").notEmpty();
+export let postBooking = (req: Request, res: Response, next: NextFunction) => {
+  const parking = new Parking({
+    bookDate: req.body.bookDate,
+    userId: req.body.userId
+  });
 
-  const errors = req.validationErrors();
-
-  if (errors) {
-    req.flash("errors", errors);
-    return res.redirect("/bookparking");
-  }
-
-  const mailOptions = {
-    to: "your@email.com",
-    from: `${req.body.name} <${req.body.email}>`,
-    subject: "Booking Form",
-    text: req.body.message
-  };
-
-  transporter.sendMail(mailOptions, (err) => {
-    if (err) {
-      req.flash("errors", { msg: err.message });
-      return res.redirect("/bookparking");
+  Parking.findOne({bookDate: req.body.bookDate, userId: req.body.userId}, (err, existingBooking: ParkingModel) => {
+    if (err) { return next(err); }
+    if (existingBooking) {
+      req.flash("errors", { msg: "Booking on that date already exists." });
+      return res.redirect("/signup");
     }
-    req.flash("success", { msg: "Email has been sent successfully!" });
-    res.redirect("/bookparking");
+    parking.save((err) => {
+      if (err) { return next(err); }
+      req.logIn(parking, (err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect("/");
+      });
+    });
   });
 };

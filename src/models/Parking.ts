@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 import User, { UserModel } from "./User";
 
 export type ParkingModel = mongoose.Document & {
-  bookDate: Date,
-  users: [UserModel],
+  bookDate: string,
+  userId: string
 };
 
 const parkingSchema = new mongoose.Schema({
-  bookDate: Date,
-  users: [User]
+  bookDate: String,
+  userId: String
 }, { timestamps: true });
 
 // export const Parking: ParkingType = mongoose.model<ParkingType>('Parking', parkingSchema);

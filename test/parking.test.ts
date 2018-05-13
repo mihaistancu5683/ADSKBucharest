@@ -22,6 +22,5 @@ describe("POST /bookparking", () => {
         done();
       })
       .expect(302);
-
   });
 });

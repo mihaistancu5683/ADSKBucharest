@@ -13,7 +13,3 @@ RUN npm install
 RUN npm install node-sass
 
 RUN npm run build
-
-EXPOSE 3000
-
-RUN npm run start

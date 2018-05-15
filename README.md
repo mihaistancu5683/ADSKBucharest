@@ -1,3 +1,10 @@
+## Instructions (WIP)
+### Install Node.js, Docker (switch to linux containers)
+### Clone this repo
+### npm install 
+### docker-compose up
+### access on localhost:3000
+
 # TypeScript Node Starter
 
 [![Dependency Status](https://david-dm.org/Microsoft/TypeScript-Node-Starter.svg)](https://david-dm.org/Microsoft/TypeScript-Node-Starter) [![Build Status](https://travis-ci.org/Microsoft/TypeScript-Node-Starter.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript-Node-Starter) 

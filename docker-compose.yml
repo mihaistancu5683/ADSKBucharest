@@ -1,21 +1,16 @@
-  devdb:
-    image: mongo
-    ports:
-      - "27017:27017"
-    command: "--smallfiles --logpath=/dev/null"
+version: '2.2'
+services:
   testdb:
     image: mongo
     ports:
-      - "27018:27018"
-    command: "--smallfiles --logpath=/dev/null"
+      - "27017:27017"
   web:
     build: .
-    command: npm run start
-    volumes:
-      - .:/myapp
     ports:
       - "3000:3000"
     links:
-      - devdb
+      - testdb
     environment:
-      PORT: 3000 # this is optional, allows express to use process.env.PORT instead of a raw 3000
+      PORT: 3000 # this is optional, allows express to use process.env.PORT instead of a raw 3000,
+      MONGODB_URI: "mongodb://testdb:27017"
+      MONGODB_URI_LOCAL: "mongodb://testdb:27017"

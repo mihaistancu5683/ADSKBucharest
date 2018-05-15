@@ -10,6 +10,6 @@ COPY . .
 
 RUN npm install
 
-RUN npm install node-sass
+EXPOSE 3000
 
-RUN npm run build
+CMD [ "npm", "run" ,"start" ]

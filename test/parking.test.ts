@@ -7,7 +7,14 @@ const expect = chai.expect;
 describe("GET /bookparking", () => {
   it("should return 200 OK", (done) => {
     request(app).get("/bookparking")
-      .expect(200, done);
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
+      });
   });
 });
 
@@ -17,10 +24,13 @@ describe("POST /bookparking", () => {
     request(app).post("/bookparking")
       .field("name", "John Doe")
       .field("email", "john@me.com")
-      .end(function(err, res) {
-        expect(res.error).to.be.false;
-        done();
-      })
-      .expect(302);
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
+      });
   });
 });

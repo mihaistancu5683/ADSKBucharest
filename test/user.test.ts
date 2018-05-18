@@ -73,7 +73,7 @@ describe("GET /forgot", () => {
 
 // Forgot with email
 describe("POST /forgot", () => {
-  it("should return 200 OK", (done) => {
+  it("should return 302 Found", (done) => {
     return request(app).post("/forgot")
       .field("email", testmail)
       .expect(302)
@@ -104,7 +104,7 @@ describe("GET /login", () => {
 
 // Login with email + pass
 describe("POST /login", () => {
-  it("should return some defined error message with valid parameters", (done) => {
+  it("should return 302 Found", (done) => {
     return request(app).post("/login")
       .field("email", testmail)
       .field("password", testpass)
@@ -121,7 +121,7 @@ describe("POST /login", () => {
 
 // Profile update name, gender, location, website
 describe("POST /account/profile", () => {
-  it("should return some defined error message with valid parameters", (done) => {
+  it("should return 302 Found", (done) => {
     return request(app).post("/account/profile")
       .field("name", "Test User")
       .field("gender", "F")
@@ -140,7 +140,7 @@ describe("POST /account/profile", () => {
 
 // Password reset should work
 describe("GET /reset/:token", () => {
-  it("should return 200 OK", (done) => {
+  it("should return 302 Found", (done) => {
     return request(app).get("/reset/:token")
       .expect(302)
       .end((err, res) => {
@@ -155,7 +155,7 @@ describe("GET /reset/:token", () => {
 
 // Password reset with new password + confirm
 describe("POST /reset/:token", () => {
-  it("should return some defined error message with valid parameters", (done) => {
+  it("should return 302 Found", (done) => {
     return request(app).post("/reset/:token")
       .field("password", testnewpass)
       .field("confirm", testnewpass)
@@ -172,7 +172,7 @@ describe("POST /reset/:token", () => {
 
 // Password reset with new password + confirm
 describe("POST /account/password", () => {
-  it("should return some defined error message with valid parameters", (done) => {
+  it("should return 302 Found", (done) => {
     return request(app).post("/account/password")
       .field("password", testnewpass)
       .field("confirm", testnewpass)
@@ -189,7 +189,7 @@ describe("POST /account/password", () => {
 
 // Account should work
 describe("GET /account", () => {
-  it("should return 200 OK", (done) => {
+  it("should return 302 Found", (done) => {
     return request(app).get("/account")
       .expect(302)
       .end((err, res) => {
@@ -204,7 +204,7 @@ describe("GET /account", () => {
 
 // Delete account
 describe("POST /account/delete", () => {
-  it("should return some defined error message with valid parameters", (done) => {
+  it("should return 302 Found", (done) => {
     return request(app).post("/account/delete")
       .expect(302)
       .end((err, res) => {
@@ -219,7 +219,7 @@ describe("POST /account/delete", () => {
 
 // Login should not work with account deleted
 describe("POST /login", () => {
-  it("should return some defined error message with valid parameters", (done) => {
+  it("should return 302 Found", (done) => {
     return request(app).post("/login")
       .field("email", testmail)
       .field("password", testpass)

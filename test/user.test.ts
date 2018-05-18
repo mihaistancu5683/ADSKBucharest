@@ -10,9 +10,16 @@ const testnewpass = "TestNewPassword*9";
 
 // Signup should work
 describe("GET /signup", () => {
-  it("should return 200 OK", () => {
-    return request(app).get("/signup")
-      .expect(200);
+  it("should return 200 OK", (done) => {
+    request(app).get("/signup")
+    .expect(200)
+    .end((err, res) => {
+      if (err) {
+        done.fail(err);
+      } else {
+        done();
+      }
+    });
   });
 });
 
@@ -23,10 +30,13 @@ describe("POST /signup", () => {
       .field("email", testmail)
       .field("password", testpass)
       .field("confirmPassword", testpass)
-      .expect(302) // Why is this not 200?
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
   });
 });
@@ -35,19 +45,29 @@ describe("POST /signup", () => {
 describe("GET /logout", () => {
   it("should return 302 Found", (done) => {
     return request(app).get("/logout")
-      .expect(302) // Why is this not 200?
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
   });
 });
 
 // Forgot should work
 describe("GET /forgot", () => {
-  it("should return 200 OK", () => {
-    return request(app).get("/forgot")
-      .expect(200);
+  it("should return 200 OK", (done) => {
+    request(app).get("/forgot")
+    .expect(200)
+    .end((err, res) => {
+      if (err) {
+        done.fail(err);
+      } else {
+        done();
+      }
+    });
   });
 });
 
@@ -56,19 +76,29 @@ describe("POST /forgot", () => {
   it("should return 200 OK", (done) => {
     return request(app).post("/forgot")
       .field("email", testmail)
-      .expect(200)
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
   });
 });
 
 // Login should work
 describe("GET /login", () => {
-  it("should return 200 OK", () => {
-    return request(app).get("/login")
-      .expect(200);
+  it("should return 200 OK", (done) => {
+    request(app).get("/login")
+    .expect(200)
+    .end((err, res) => {
+      if (err) {
+        done.fail(err);
+      } else {
+        done();
+      }
+    });
   });
 });
 
@@ -78,10 +108,13 @@ describe("POST /login", () => {
     return request(app).post("/login")
       .field("email", testmail)
       .field("password", testpass)
-      .expect(302) // Why is this not 200?
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
   });
 });
@@ -94,10 +127,13 @@ describe("POST /account/profile", () => {
       .field("gender", "F")
       .field("location", "Moon")
       .field("website", "www.fictitioussite.com")
-      .expect(302) // Why is this not 200?
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
   });
 });
@@ -106,11 +142,14 @@ describe("POST /account/profile", () => {
 describe("GET /reset/:token", () => {
   it("should return 200 OK", (done) => {
     return request(app).get("/reset/:token")
-      .expect(302) // Why is this not 200?
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
-    });
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
+      });
   });
 });
 
@@ -120,10 +159,13 @@ describe("POST /reset/:token", () => {
     return request(app).post("/reset/:token")
       .field("password", testnewpass)
       .field("confirm", testnewpass)
-      .expect(302) // Why is this not 200?
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
   });
 });
@@ -134,10 +176,13 @@ describe("POST /account/password", () => {
     return request(app).post("/account/password")
       .field("password", testnewpass)
       .field("confirm", testnewpass)
-      .expect(302) // Why is this not 200?
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
   });
 });
@@ -146,10 +191,13 @@ describe("POST /account/password", () => {
 describe("GET /account", () => {
   it("should return 200 OK", (done) => {
     return request(app).get("/account")
-      .expect(302) // Why is this not 200?
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
   });
 });
@@ -158,10 +206,13 @@ describe("GET /account", () => {
 describe("POST /account/delete", () => {
   it("should return some defined error message with valid parameters", (done) => {
     return request(app).post("/account/delete")
-      .expect(302) // Why is this not 200?
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
   });
 });
@@ -172,10 +223,13 @@ describe("POST /login", () => {
     return request(app).post("/login")
       .field("email", testmail)
       .field("password", testpass)
-      .expect(302) // Why is this not 200?
-      .end(function(err, res) {
-        expect(res.error).not.to.be.undefined;
-        done();
+      .expect(302)
+      .end((err, res) => {
+        if (err) {
+          done.fail(err);
+        } else {
+          done();
+        }
       });
   });
 });

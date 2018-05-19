@@ -23,7 +23,7 @@ dotenv.config({ path: ".env.example" });
 import * as homeController from "./controllers/home";
 import * as userController from "./controllers/user";
 import * as apiController from "./controllers/api";
-import * as parkingController from "./controllers/parking";
+import * as bookDateController from "./controllers/bookDate";
 
 
 // API keys and Passport configuration
@@ -100,8 +100,8 @@ app.get("/reset/:token", userController.getReset);
 app.post("/reset/:token", userController.postReset);
 app.get("/signup", userController.getSignup);
 app.post("/signup", userController.postSignup);
-app.get("/bookparking", parkingController.getBookings);
-app.post("/bookparking", parkingController.postBooking);
+app.get("/bookdate", bookDateController.getBookings);
+app.post("/bookdate", bookDateController.postBooking);
 app.get("/account", passportConfig.isAuthenticated, userController.getAccount);
 app.post("/account/profile", passportConfig.isAuthenticated, userController.postUpdateProfile);
 app.post("/account/password", passportConfig.isAuthenticated, userController.postUpdatePassword);

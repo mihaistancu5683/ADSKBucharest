@@ -4,9 +4,9 @@ import app from "../src/app";
 const chai = require("chai");
 const expect = chai.expect;
 
-describe("GET /bookparking", () => {
+describe("GET /bookdate", () => {
   it("should return 200 OK", (done) => {
-    request(app).get("/bookparking")
+    request(app).get("/bookdate")
       .expect(200)
       .end((err, res) => {
         if (err) {
@@ -19,7 +19,7 @@ describe("GET /bookparking", () => {
 });
 
 
-describe("POST /bookparking", () => {
+describe("POST /bookdate", () => {
   it("should return false from assert when no message is found", (done) => {
 
     // Need a user in order to book a parking spot
@@ -37,7 +37,7 @@ describe("POST /bookparking", () => {
       });
 
     // Book parking spot
-    request(app).post("/bookparking")
+    request(app).post("/bookdate")
       .field("bookDate", "19/05/2018")
       .expect(302)
       .end((err, res) => {
@@ -49,7 +49,7 @@ describe("POST /bookparking", () => {
       });
 
     // Cancel previous booking
-    request(app).post("/bookparking")
+    request(app).post("/bookdate")
     .field("bookDate", "19/05/2018")
     .expect(302)
     .end((err, res) => {

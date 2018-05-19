@@ -34,7 +34,7 @@ export let getBookings = (req: Request, res: Response) => {
   const todayDate = GetTodayDate();
 
   BookDate.find({bookDate: { $gte : todayDate }}, (err, alldata) => {
-    res.render("parking", {
+    res.render("bookDate", {
       title: "Book parking spot",
       content: alldata
     });

@@ -7,13 +7,9 @@ block content
   form.form-horizontal(method='POST')
     input(type='hidden', name='_csrf', value=_csrf)
     .form-group
-      label(class='col-sm-2 control-label', for='userId') UserId
-      .col-sm-8
-        input.form-control(type='text', name='userId', id='userId', autofocus=true)
-    .form-group
       label(class='col-sm-2 control-label', for='bookDate') Booking Date
       .col-sm-8
-        input.form-control(type='text', name='bookDate', id='bookDate')
+        input.form-control(type='text', name='bookDate', id='bookDate', autofocus=true)
     .form-group
       .col-sm-offset-2.col-sm-8
         button.btn.btn-primary(type='submit')

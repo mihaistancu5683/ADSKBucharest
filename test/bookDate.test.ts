@@ -5,9 +5,9 @@ const chai = require("chai");
 const expect = chai.expect;
 
 describe("GET /bookdate", () => {
-  it("should return 200 OK", (done) => {
+  it("should return 302 Found", (done) => {
     request(app).get("/bookdate")
-      .expect(200)
+      .expect(302)
       .end((err, res) => {
         if (err) {
           done.fail(err);
@@ -20,7 +20,7 @@ describe("GET /bookdate", () => {
 
 
 describe("POST /bookdate", () => {
-  it("should return false from assert when no message is found", (done) => {
+  it("should return 302 Found", (done) => {
 
     // Need a user in order to book a parking spot
     request(app).post("/signup")

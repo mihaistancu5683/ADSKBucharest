@@ -5,9 +5,9 @@ import { WriteError } from "mongodb";
 
 const parkingSpotsNo = 5;
 
-function GetTodayDate(): string {
-  const today = new Date();
-  const dd_tmp = today.getDate();
+function GetTodayDate(addDays: number): string {
+  const today = new Date(new Date().getTime() + addDays * 24 * 60 * 60 * 1000);
+  const dd_tmp = today.getDate() ;
   const mm_tmp = today.getMonth() + 1; // January is 0!
   const yyyy = today.getFullYear();
   let dd, mm: string;
@@ -31,14 +31,38 @@ function GetTodayDate(): string {
 /**
  * GET /bookdate
  * Book parking form page.
- */
-export let getBookings = (req: Request, res: Response) => {
-  const todayDate = GetTodayDate();
+ */export let getBookings = (req: Request, res: Response) => {
+  const nextWeek: string[] = [];
 
-  BookDate.find({bookDate: { $gte : todayDate }}, (err, alldata) => {
+  for (let i = 0; i <= 7; i++) {
+    const day = GetTodayDate(i);
+    nextWeek.push(day);
+  }
+
+  const todayDate = GetTodayDate(0);
+  BookDate.find({bookDate: { $gte : todayDate }}, (err, allDates: BookingDateModel[]) => {
+    class RespItem {
+      date: string;
+      available: boolean;
+    }
+    const response: RespItem[] = [];
+
+    nextWeek.forEach(day => {
+      let availableDay: boolean = true;
+      allDates.forEach(date => {
+        if ((day == date.bookDate) && (date.users.length >= parkingSpotsNo)) {
+          availableDay = false;
+        }
+      });
+      const item: RespItem = {
+        date: day,
+        available: availableDay
+      };
+      response.push(item);
+    });
     res.render("bookDate", {
       title: "Book parking spot",
-      content: alldata
+      content: response
     });
   });
 };

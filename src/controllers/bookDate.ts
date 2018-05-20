@@ -42,21 +42,30 @@ function GetTodayDate(addDays: number): string {
   const todayDate = GetTodayDate(0);
   BookDate.find({bookDate: { $gte : todayDate }}, (err, allDates: BookingDateModel[]) => {
     class RespItem {
-      date: string;
+      alreadyBooked: boolean;
       available: boolean;
+      date: string;
     }
     const response: RespItem[] = [];
 
     nextWeek.forEach(day => {
       let availableDay: boolean = true;
+      let booked: boolean = false;
       allDates.forEach(date => {
-        if ((day == date.bookDate) && (date.users.length >= parkingSpotsNo)) {
-          availableDay = false;
+        if (day === date.bookDate) {
+          if (date.users.length >= parkingSpotsNo) {
+            availableDay = false;
+          }
+          if (date.users.filter(user => { return user === req.user.id; })) {
+            booked = true;
+            availableDay = true; // should be able to delete booking
+          }
         }
       });
       const item: RespItem = {
         date: day,
-        available: availableDay
+        available: availableDay,
+        alreadyBooked: booked
       };
       response.push(item);
     });

@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from "express";
 import { default as BookDate, BookingDateModel } from "../models/BookDate";
 import { WriteError } from "mongodb";
 
+const parkingSpotsNo = 5;
+
 function GetTodayDate(): string {
   const today = new Date();
   const dd_tmp = today.getDate();
@@ -67,15 +69,23 @@ export let postBooking = (req: Request, res: Response, next: NextFunction) => {
             }
             index++;
           });
-          if (userFound) { // User is on the booking list, delete the booking
-            delete existingBookDate.users[index];
+          if (userFound) { // User is on the booking list, replace the users array with another that doesn't contain the user
+            const filteredUsers = existingBookDate.users.filter(user => {return user !== req.user.id; });
+            BookDate.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: filteredUsers} , (err3, resp1: BookingDateModel) => {
+              if (err3) { return next(err3); }
+            });
           }
-          else { // User is not on the booking list, book the date
+          else { // User is not on the booking list, add user to users array (book date)
             existingBookDate.users.push(req.user.id);
+            if (existingBookDate.users.length <= parkingSpotsNo) {
+              BookDate.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: existingBookDate.users} , (err4, resp2: BookingDateModel) => {
+                if (err4) { return next(err4); }
+              });
+            }
+            else {
+              return next("Booking list already full for selected day");
+            }
           }
-          BookDate.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: existingBookDate.users} , (err3, resp: BookingDateModel) => {
-            if (err3) { return next(err3); }
-          });
         }
         return res.redirect("/bookdate");
     });

@@ -12,6 +12,8 @@ block content
             input(type="hidden",name="bookDate",value=item.date)
           .col-sm-offset-2.col-sm-8
             if item.alreadyBooked
-              button.btn.btn-secundary(type="submit") #{item.date}
+              button.btn.btn-success(type="submit") #{item.date}
+            else if item.available && !item.alreadyBooked
+              button.btn.btn-primary(type="submit") #{item.date}
             else
-              button.btn.btn-primary(type="submit" disabled=!item.available) #{item.date}
+              button.btn.btn-danger(type="submit" disabled) #{item.date}

@@ -34,7 +34,7 @@ function GetTodayDate(addDays: number): string {
  */export let getBookings = (req: Request, res: Response) => {
   const nextWeek: string[] = [];
 
-  for (let i = 0; i <= 7; i++) {
+  for (let i = 0; i <= 6; i++) {
     const day = GetTodayDate(i);
     nextWeek.push(day);
   }
@@ -56,7 +56,7 @@ function GetTodayDate(addDays: number): string {
           if (date.users.length >= parkingSpotsNo) {
             availableDay = false;
           }
-          if (date.users.filter(user => { return user === req.user.id; })) {
+          if (-1 !== date.users.indexOf(req.user.id)) {
             booked = true;
             availableDay = true; // should be able to delete booking
           }

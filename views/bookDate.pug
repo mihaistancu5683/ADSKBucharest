@@ -4,18 +4,14 @@ block content
   .page-header
     h3 Parking Booking Form
 
-  form.form-vertical(method='POST')
-    input(type='hidden', name='_csrf', value=_csrf)
-    .form-group
-      label(class='col-sm-2 control-label', for='bookDate') Booking Date
-      .col-sm-8
-        input.form-control(type='text', name='bookDate', id='bookDate', autofocus=true)
-    .form-group
-      .col-sm-offset-2.col-sm-8
-        button.btn.btn-primary(type='submit')
-          i.fa.fa-envelope
-          | Send
     each item in content
-      .form-group
-        .col-sm-offset-2.col-sm-8
-          button.btn.btn-primary(type='submit') #{item.date}
+      form.form-horizontal(method='POST')
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+          .col-sm-8
+            input(type="hidden",name="bookDate",value=item.date)
+          .col-sm-offset-2.col-sm-8
+            if item.alreadyBooked
+              button.btn.btn-secundary(type="submit") #{item.date}
+            else
+              button.btn.btn-primary(type="submit" disabled=!item.available) #{item.date}

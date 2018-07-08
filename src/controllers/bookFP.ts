@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import { Request, Response, NextFunction } from "express";
-import { default as BookDate, BookingDateModel } from "../models/BookDate";
+import { default as BookFP, BookingFPModel } from "../models/BookFP";
 import { WriteError } from "mongodb";
 
 const parkingSpotsNo = 5;
@@ -29,7 +29,7 @@ function GetTodayDate(addDays: number): string {
 }
 
 /**
- * GET /bookdate
+ * GET /bookfp
  * Book parking form page.
  */export let getBookings = (req: Request, res: Response) => {
   const nextWeek: string[] = [];
@@ -40,7 +40,7 @@ function GetTodayDate(addDays: number): string {
   }
 
   const todayDate = GetTodayDate(0);
-  BookDate.find({bookDate: { $gte : todayDate }}, (err, allDates: BookingDateModel[]) => {
+  BookFP.find({bookDate: { $gte : todayDate }}, (err, allDates: BookingFPModel[]) => {
     class RespItem {
       alreadyBooked: boolean;
       available: boolean;
@@ -69,8 +69,8 @@ function GetTodayDate(addDays: number): string {
       };
       response.push(item);
     });
-    res.render("bookDate", {
-      title: "Book parking spot",
+    res.render("bookFP", {
+      title: "Book fast parking spot",
       content: response
     });
   });
@@ -81,13 +81,13 @@ function GetTodayDate(addDays: number): string {
  * Send a bookdate to db.
  */
 export let postBooking = (req: Request, res: Response, next: NextFunction) => {
-  const newBooking = new BookDate({
+  const newBooking = new BookFP({
     bookDate: req.body.bookDate,
     users: [req.user.id]
   });
-    BookDate.findOne({bookDate: req.body.bookDate}, (err, existingBookDate: BookingDateModel) => {
+    BookFP.findOne({bookDate: req.body.bookDate}, (err, existingBookFP: BookingFPModel) => {
       if (err) { return next(err); }
-      if (!existingBookDate) {
+      if (!existingBookFP) {
         // Date not found, add date and user
            newBooking.save((err2) => {
              if (err2) { return next(err2); }
@@ -96,22 +96,22 @@ export let postBooking = (req: Request, res: Response, next: NextFunction) => {
         else { // Date found, check if current user is on the booking list
           let userFound: boolean = false;
           let index: number = -1;
-          existingBookDate.users.forEach(user => {
+          existingBookFP.users.forEach(user => {
             if (user === req.user.id) {
               userFound = true;
             }
             index++;
           });
           if (userFound) { // User is on the booking list, replace the users array with another that doesn't contain the user
-            const filteredUsers = existingBookDate.users.filter(user => {return user !== req.user.id; });
-            BookDate.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: filteredUsers} , (err3, resp1: BookingDateModel) => {
+            const filteredUsers = existingBookFP.users.filter(user => {return user !== req.user.id; });
+            BookFP.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: filteredUsers} , (err3, resp1: BookingFPModel) => {
               if (err3) { return next(err3); }
             });
           }
           else { // User is not on the booking list, add user to users array (book date)
-            existingBookDate.users.push(req.user.id);
-            if (existingBookDate.users.length <= parkingSpotsNo) {
-              BookDate.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: existingBookDate.users} , (err4, resp2: BookingDateModel) => {
+            existingBookFP.users.push(req.user.id);
+            if (existingBookFP.users.length <= parkingSpotsNo) {
+              BookFP.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: existingBookFP.users} , (err4, resp2: BookingFPModel) => {
                 if (err4) { return next(err4); }
               });
             }
@@ -120,6 +120,6 @@ export let postBooking = (req: Request, res: Response, next: NextFunction) => {
             }
           }
         }
-        return res.redirect("/bookdate");
+        return res.redirect("/bookfp");
     });
   };

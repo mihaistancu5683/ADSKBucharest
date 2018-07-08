@@ -1,5 +1,7 @@
 language: node_js
 node_js: 8.9.1
+env:
+  MONGODB_URI_LOCAL=mongodb://localhost:27017
 services:
 - mongodb
 script:
@@ -9,6 +11,6 @@ deploy:
   provider: heroku
   api_key:
     secure: VA0xwGCdJ1g6UupwmPScgNZv46OSWhhS6ZNNIIUVJeGGR7XhMafYlJTzEveHeH0Odq1fnL90VaFFDlZMYpzEUgSHpYdBs7+6+45TraJgpdUc+ZeacnM+L+nz+9k86+5DEjH4EflNlIYIxWHUnbVtQ+dA7jfbEu3qJ/ahkPb462qkBfTcgtbdP9xvohv3treVjKZHuMjbDrHYouTwiomPQ3gj3HS4AyAKRWns7F0mYpX/o+PudT8UVBLWjpnZMxsulWs+icEYQ1u5Hg9EeYPYerUmqh2ygZt1FZmSuhGa3PBzd5s7ba1wJN5nTS1uoegpDkIruC0uDglzpPPlvbxqak/Dty9cjFBYOrmqNczZRTq29hNocCu/KHtogXLLSwy7pMUCIkzvKs/ZhyH2zKzb6XAdvaAMpQVUYshChx0GNR1waDLX8As7epXFbwED1uNXmgIjLlysroDTFipwE2SC+PoahJUdHTxcsD5CylPoiSxQzdZ4PYGKWrWMvD2IIg0MsyAgSjVl9QSyOKvahFaRF+Zlsx2vbi1PKjvexCIG7FF0hFLLjlquFvUnkVZzyC2LJPp71BIxg/zgOfnYRJ+3BvDMiVuAVdT3aZy5sspG5hlixbBOvZmXNcpNsktKYeU7lDZW1VBS8CDGXGkVtJ54q9u3FHz35SEEy03P/TxM89Y=
-  app: adskbucharest
+  app: adsk-bucharest
 true:
   repo: mihaistancu5683/ADSKBucharest

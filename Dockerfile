@@ -6,8 +6,8 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Bundle app source
-COPY ./dist ./dist
-COPY ./views ./views
+COPY dist/ /dist/
+COPY views/ /views/
 
 RUN npm install
 

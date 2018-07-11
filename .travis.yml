@@ -4,8 +4,6 @@ services:
 - docker
 - mongodb
 before_script:
-  - "npm install -g node-sass"
-  - "npm install -g typescript"
   - "npm install"
   - "npm run build"
 script:

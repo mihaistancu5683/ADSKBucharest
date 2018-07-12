@@ -4,7 +4,7 @@ src
 test
 .env
 travis.yml
-copyStaticaAsets.ts
+copyStaticAssets.ts
 heroku.yml
 jest.config.js
 LICENSE

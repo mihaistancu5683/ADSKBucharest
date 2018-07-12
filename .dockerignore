@@ -1,5 +1,10 @@
 .vscode
+.gitignore
+.git
 node_modules
+coverage
+.dockerignore
+Dockerfile
 src
 test
 .env

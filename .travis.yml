@@ -1,4 +1,5 @@
 language: node_js
+sudo: required
 node_js: 8.9.1
 services:
 - docker
@@ -6,6 +7,7 @@ services:
 before_script:
   - "npm install"
   - "npm run build"
+  - "rm .gitignore"
 script:
   - "npm run test"
   - "ls"

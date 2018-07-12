@@ -7,6 +7,7 @@ WORKDIR /usr/src/app
 COPY . .
 COPY ./dist/ /dist/
 RUN ls /usr/src/app
+RUN ls /usr/src/app/dist
 
 EXPOSE 3000
 

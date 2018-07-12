@@ -9,10 +9,10 @@ COPY package*.json ./
 RUN ls /usr/src/app
 RUN mkdir dist
 RUN ls /usr/src/app
-COPY ./dist/ /dist/
+COPY ./dist/ ./dist/
 RUN ls /usr/src/app/dist
 RUN mkdir views 
-COPY ./views/ /views/
+COPY ./views/ ./views/
 
 RUN npm install
 RUN ls /usr/src/app

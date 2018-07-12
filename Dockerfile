@@ -5,8 +5,8 @@ WORKDIR /usr/src/app
 
 # Bundle everything but files in dockerignore
 COPY . .
-RUN ls /usr/src/app
-RUN ls /usr/src/app/dist
+RUN ls ./app
+RUN ls ./app/dist
 
 EXPOSE 3000
 

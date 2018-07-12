@@ -7,9 +7,9 @@ COPY package*.json ./
 
 # Bundle app source
 RUN mkdir dist
-COPY dist/ /dist/
+COPY ./dist/ /dist/
 RUN mkdir views 
-COPY views/ /views/
+COPY ./views/ /views/
 
 RUN npm install
 

@@ -9,7 +9,9 @@ before_deploy:
   - "npm run build"
   - "rm .gitignore"
   - "npm run test"
-  - "ls"
+  - "ls -la"
+  - "ls -la views"
+  - "ls -la dist"
 deploy:
   provider: heroku
   api_key:

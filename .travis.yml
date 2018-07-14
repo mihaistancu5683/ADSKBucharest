@@ -17,5 +17,3 @@ deploy:
   on:
     repo: mihaistancu5683/ADSKBucharest
     branch: master
-  run:
-      - "npm install --production"

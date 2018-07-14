@@ -12,6 +12,7 @@ before_deploy:
   - "ls -la"
   - "ls -la views"
   - "ls -la dist"
+  - "mkdir testfolder"
 deploy:
   provider: heroku
   api_key:

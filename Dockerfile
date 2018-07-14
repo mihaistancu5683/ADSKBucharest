@@ -4,10 +4,7 @@ FROM node:8.9.1-alpine
 WORKDIR /usr/src/app
 
 # Bundle everything but files in dockerignore
-RUN mkdir dist
 COPY . .
-RUN ls ./
-RUN ls ./dist
 
 EXPOSE 3000
 

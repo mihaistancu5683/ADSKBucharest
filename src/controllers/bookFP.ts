@@ -3,10 +3,27 @@ import { Request, Response, NextFunction } from "express";
 import { default as BookFP, BookingFPModel } from "../models/BookFP";
 import { WriteError } from "mongodb";
 
-const parkingSpotsNo = 5;
+enum BookingStatus {
+  Available,
+  Booked,
+  Full
+}
+class Day {
+  date: string;
+  name: string;
+}
+class RespItem {
+  date: string;
+  fulldate: string;
+  status: BookingStatus;
+}
 
-function GetTodayDate(addDays: number): string {
+const parkingSpotsNo = 5;
+const weekday = new Array("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+
+function GetSimpleDateFromToday(addDays: number): Day {
   const today = new Date(new Date().getTime() + addDays * 24 * 60 * 60 * 1000);
+  const idx = today.getDay();
   const dd_tmp = today.getDate() ;
   const mm_tmp = today.getMonth() + 1; // January is 0!
   const yyyy = today.getFullYear();
@@ -24,48 +41,44 @@ function GetTodayDate(addDays: number): string {
   else {
     mm = mm_tmp.toString();
   }
-
-  return dd + "/" + mm + "/" + yyyy.toString();
+  const day = new Day();
+  day.date = dd + "/" + mm + "/" + yyyy.toString();
+  day.name = weekday[idx];
+  return day;
 }
 
 /**
  * GET /bookfp
  * Book parking form page.
  */export let getBookings = (req: Request, res: Response) => {
-  const nextWeek: string[] = [];
+  const nextWeek: Day[] = [];
 
   for (let i = 0; i <= 6; i++) {
-    const day = GetTodayDate(i);
+    const day = GetSimpleDateFromToday(i);
     nextWeek.push(day);
   }
 
-  const todayDate = GetTodayDate(0);
-  BookFP.find({bookDate: { $gte : todayDate }}, (err, allDates: BookingFPModel[]) => {
-    class RespItem {
-      alreadyBooked: boolean;
-      available: boolean;
-      date: string;
-    }
+  const todayDate = GetSimpleDateFromToday(0);
+  BookFP.find({bookDate: { $gte : todayDate.date }}, (err, allDates: BookingFPModel[]) => {
+
     const response: RespItem[] = [];
 
     nextWeek.forEach(day => {
-      let availableDay: boolean = true;
-      let booked: boolean = false;
+      let daystatus: BookingStatus = BookingStatus.Available;
       allDates.forEach(date => {
-        if (day === date.bookDate) {
+        if (day.date === date.bookDate) {
           if (date.users.length >= parkingSpotsNo) {
-            availableDay = false;
+            daystatus = BookingStatus.Full;
           }
           if (-1 !== date.users.indexOf(req.user.id)) {
-            booked = true;
-            availableDay = true; // should be able to delete booking
+            daystatus = BookingStatus.Booked;
           }
         }
       });
       const item: RespItem = {
-        date: day,
-        available: availableDay,
-        alreadyBooked: booked
+        fulldate: day.name + " " + day.date,
+        date: day.date,
+        status: daystatus
       };
       response.push(item);
     });
@@ -85,41 +98,41 @@ export let postBooking = (req: Request, res: Response, next: NextFunction) => {
     bookDate: req.body.bookDate,
     users: [req.user.id]
   });
-    BookFP.findOne({bookDate: req.body.bookDate}, (err, existingBookFP: BookingFPModel) => {
-      if (err) { return next(err); }
-      if (!existingBookFP) {
-        // Date not found, add date and user
-           newBooking.save((err2) => {
-             if (err2) { return next(err2); }
-           });
+  BookFP.findOne({bookDate: req.body.bookDate}, (err, existingBookFP: BookingFPModel) => {
+    if (err) { return next(err); }
+    if (!existingBookFP) {
+      // Date not found, add date and user
+      newBooking.save((err2) => {
+        if (err2) { return next(err2); }
+      });
+    }
+    else { // Date found, check if current user is on the booking list
+      let userFound: boolean = false;
+      let index: number = -1;
+      existingBookFP.users.forEach(user => {
+        if (user === req.user.id) {
+          userFound = true;
         }
-        else { // Date found, check if current user is on the booking list
-          let userFound: boolean = false;
-          let index: number = -1;
-          existingBookFP.users.forEach(user => {
-            if (user === req.user.id) {
-              userFound = true;
-            }
-            index++;
+        index++;
+      });
+      if (userFound) { // User is on the booking list, replace the users array with another that doesn't contain the user
+        const filteredUsers = existingBookFP.users.filter(user => {return user !== req.user.id; });
+        BookFP.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: filteredUsers} , (err3, resp1: BookingFPModel) => {
+          if (err3) { return next(err3); }
+        });
+      }
+      else { // User is not on the booking list, add user to users array (book date)
+        existingBookFP.users.push(req.user.id);
+        if (existingBookFP.users.length <= parkingSpotsNo) {
+          BookFP.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: existingBookFP.users} , (err4, resp2: BookingFPModel) => {
+            if (err4) { return next(err4); }
           });
-          if (userFound) { // User is on the booking list, replace the users array with another that doesn't contain the user
-            const filteredUsers = existingBookFP.users.filter(user => {return user !== req.user.id; });
-            BookFP.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: filteredUsers} , (err3, resp1: BookingFPModel) => {
-              if (err3) { return next(err3); }
-            });
-          }
-          else { // User is not on the booking list, add user to users array (book date)
-            existingBookFP.users.push(req.user.id);
-            if (existingBookFP.users.length <= parkingSpotsNo) {
-              BookFP.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: existingBookFP.users} , (err4, resp2: BookingFPModel) => {
-                if (err4) { return next(err4); }
-              });
-            }
-            else {
-              return next("Booking list already full for selected day");
-            }
-          }
         }
-        return res.redirect("/bookfp");
-    });
-  };
+        else {
+          return next("Booking list already full for selected day");
+        }
+      }
+    }
+    return res.redirect("/bookfp");
+  });
+};

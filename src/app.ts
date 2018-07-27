@@ -31,6 +31,7 @@ import * as passportConfig from "./config/passport";
 
 // Create Express server
 const app = express();
+app.locals.env = process.env;
 
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;

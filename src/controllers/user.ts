@@ -7,6 +7,7 @@ import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
 import { WriteError } from "mongodb";
 const request = require("express-validator");
+const router =  require("express").Router();
 
 
 /**
@@ -20,6 +21,27 @@ export let getLogin = (req: Request, res: Response) => {
   res.render("account/login", {
     title: "Login"
   });
+};
+
+/**
+ * GET /adsklogin
+ * Login page.
+ */
+export let getAdskLogin = (req: Request, res: Response) => {
+  const code = req.body.code;
+  if (code) {
+    router.post("https://developer.api.autodesk.com/authentication/v1/gettoken", function(req: Request, res: Response) {
+      res.set({
+        "content-type": "application/x-www-form-urlencoded"
+      }).send({
+        "client_id": process.env.ADSK_CLIENT_ID,
+        "client_secret": process.env.ADSK_CLIENT_SECRET,
+        "grant_type": "authorization_code",
+        "code": code,
+        "redirect_uri": process.env.ADSK_CALLBACK_URI
+      });
+    });
+  }
 };
 
 /**

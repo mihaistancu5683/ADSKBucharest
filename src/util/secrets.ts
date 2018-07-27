@@ -13,6 +13,10 @@ export const ENVIRONMENT = process.env.NODE_ENV;
 const prod = ENVIRONMENT === "production"; // Anything else is treated as 'dev'
 
 export const SESSION_SECRET = process.env["SESSION_SECRET"];
+export const ADSK_CLIENT_ID = process.env["ADSK_CLIENT_ID"];
+export const ADSK_CLIENT_SECRET = process.env["ADSK_CLIENT_SECRET"];
+export const ADSK_CALLBACK_URI = process.env["ADSK_CALLBACK_URI"];
+
 export const MONGODB_URI = prod ? process.env["MONGOLAB_URI"] : process.env["MONGODB_URI_LOCAL"];
 
 if (!SESSION_SECRET) {

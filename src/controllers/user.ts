@@ -27,24 +27,25 @@ export let getLogin = (req: Request, res: Response) => {
  */
 export let getAdskLogin = (req: Request, res: Response) => {
   const code = req.query.code;
+
   if (code) {
-    const data = {
-      "client_id": process.env.ADSK_CLIENT_ID,
-      "client_secret": process.env.ADSK_CLIENT_SECRET,
-      "grant_type": "authorization_code",
-      "code": code,
-      "redirect_uri": process.env.ADSK_CALLBACK_URI
-    };
+    const data =
+      "client_id=" + process.env.ADSK_CLIENT_ID + "&" +
+      "client_secret=" + process.env.ADSK_CLIENT_SECRET + "&" +
+      "grant_type=authorization_code&" +
+      "code=" + req.query.code + "&" +
+      "redirect_uri=" + process.env.ADSK_CALLBACK_URI;
+
     const options = {
       url: "https://developer.api.autodesk.com/authentication/v1/gettoken",
       method: "POST",
       headers: {
         "content-type": "application/x-www-form-urlencoded"
       },
-      body: JSON.stringify(data)
+      body: data
     };
     request(options, function (error: Error, response: Response, body: Body) {
-      // console.log(response);
+      console.log(body);
     });
   }
   else {

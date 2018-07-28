@@ -42,6 +42,9 @@ export let getAdskLogin = (req: Request, res: Response) => {
       });
     });
   }
+  else {
+    return res.redirect("/");
+  }
 };
 
 /**

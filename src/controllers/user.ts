@@ -24,7 +24,6 @@ export let getLogin = (req: Request, res: Response) => {
 
 /**
  * GET /adsklogin
- * Login page.
  */
 export let getAdskLogin = (req: Request, res: Response) => {
   const code = req.query.code;
@@ -51,6 +50,15 @@ export let getAdskLogin = (req: Request, res: Response) => {
   else {
     return res.redirect("/");
   }
+};
+
+/**
+ * POST /adsklogin
+ */
+export let postAdskLogin = (req: Request, res: Response, next: NextFunction) => {
+  const code = req.body.access_token;
+  console.log(req.body);
+  // return res.redirect("/");
 };
 
 /**

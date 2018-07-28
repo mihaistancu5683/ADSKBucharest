@@ -18,7 +18,11 @@
       ul.nav.navbar-nav.navbar-right
         if !user
           li(class=(title == 'Login') ? 'active' : undefined)
-            a(href='https://developer.api.autodesk.com/authentication/v1/authorize?response_type=code&client_id=#{env.ADSK_CLIENT_ID}&redirect_uri=#{env.ADSK_CALLBACK_URI}&scope=data:read') Login / Sign up
+            a(href='https://developer.api.autodesk.com/authentication/v1/authorize'+
+              '?response_type=code'+
+              '&client_id=' + process.env.ADSK_CLIENT_ID + 
+              '&redirect_uri=' + process.env.ADSK_CALLBACK_URI + 
+              '&scope=data:read') Login / Sign up
         else
           li.dropdown(class=(title == 'Account Management') ? 'active' : undefined)
             a.dropdown-toggle(href='#', data-toggle='dropdown')

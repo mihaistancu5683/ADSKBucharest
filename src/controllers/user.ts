@@ -45,7 +45,10 @@ export let getAdskLogin = (req: Request, res: Response) => {
       body: data
     };
     request(options, function (error: Error, response: Response, body: Body) {
-      console.log(body);
+      // Render for testing purposes
+      res.render("account/signup", {
+        title: "getadsklogin response" + body
+      });
     });
   }
   else {
@@ -58,8 +61,10 @@ export let getAdskLogin = (req: Request, res: Response) => {
  */
 export let postAdskLogin = (req: Request, res: Response, next: NextFunction) => {
   const code = req.body.access_token;
-  console.log(req.body);
-  // return res.redirect("/");
+      // Render for testing purposes
+      res.render("account/signup", {
+        title: "postadsklogin response" + req.body
+      });
 };
 
 /**

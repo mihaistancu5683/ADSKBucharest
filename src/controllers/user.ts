@@ -28,7 +28,7 @@ export let getLogin = (req: Request, res: Response) => {
  * Login page.
  */
 export let getAdskLogin = (req: Request, res: Response) => {
-  const code = req.body.code;
+  const code = req.query.code;
   if (code) {
     router.post("https://developer.api.autodesk.com/authentication/v1/gettoken", function(req: Request, res: Response) {
       res.set({

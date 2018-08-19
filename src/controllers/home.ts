@@ -3,26 +3,13 @@ const request = require("request");
 
 function authStep1 (req: Request, res: Response) {
   return new Promise(  function(resolve, reject) {
-    const options = {
-      url:
+    const step1url =
       "https://developer.api.autodesk.com/authentication/v1/authorize" +
       "?response_type=code" +
       "&client_id=" + process.env.ADSK_CLIENT_ID +
       "&redirect_uri=" + process.env.ADSK_CALLBACK_URI +
-      "&scope=data:read",
-      method: "GET"
-    };
-    request(options, function (error: Error, response: Response, body: Body) {
-      if (!error) {
-        resolve(body);
-        res.render("account/signup", {
-          title: "authorize response" + body
-        });
-      }
-      else {
-        reject(error);
-      }
-    });
+      "&scope=data:read";
+    res.redirect(step1url);
   });
 }
 

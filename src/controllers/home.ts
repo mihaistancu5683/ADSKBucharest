@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 const request = require("request");
 
-function authStep1 () {
+function authStep1 (req: Request, res: Response) {
   return new Promise(  function(resolve, reject) {
     const options = {
       url:
@@ -14,7 +14,10 @@ function authStep1 () {
     };
     request(options, function (error: Error, response: Response, body: Body) {
       if (!error) {
-        resolve();
+        resolve(body);
+        res.render("account/signup", {
+          title: "authorize response" + body
+        });
       }
       else {
         reject(error);
@@ -44,7 +47,7 @@ function authStep2 (req: Request, res: Response) {
       if (!error) {
         resolve(body);
         res.render("account/signup", {
-          title: "getadsklogin response" + body
+          title: "gettoken response" + body
         });
       }
       else {
@@ -60,7 +63,7 @@ function authStep2 (req: Request, res: Response) {
  */
 export let index = (req: Request, res: Response) => {
   if (!req.query.code) {
-    authStep1();
+    authStep1(req, res);
   }
   else {
     authStep2(req, res);

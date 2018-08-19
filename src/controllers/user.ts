@@ -6,7 +6,6 @@ import { default as User, UserModel, AuthToken } from "../models/User";
 import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
 import { WriteError } from "mongodb";
-const request = require("request");
 
 
 /**
@@ -20,51 +19,6 @@ export let getLogin = (req: Request, res: Response) => {
   res.render("account/login", {
     title: "Login"
   });
-};
-
-/**
- * GET /adsklogin
- */
-export let getAdskLogin = (req: Request, res: Response) => {
-  const code = req.query.code;
-
-  if (code) {
-    const data =
-      "client_id=" + process.env.ADSK_CLIENT_ID + "&" +
-      "client_secret=" + process.env.ADSK_CLIENT_SECRET + "&" +
-      "grant_type=authorization_code&" +
-      "code=" + req.query.code + "&" +
-      "redirect_uri=" + process.env.ADSK_CALLBACK_URI;
-
-    const options = {
-      url: "https://developer.api.autodesk.com/authentication/v1/gettoken",
-      method: "POST",
-      headers: {
-        "content-type": "application/x-www-form-urlencoded"
-      },
-      body: data
-    };
-    request(options, function (error: Error, response: Response, body: Body) {
-      // Render for testing purposes
-      res.render("account/signup", {
-        title: "getadsklogin response" + body
-      });
-    });
-  }
-  else {
-    return res.redirect("/");
-  }
-};
-
-/**
- * POST /adsklogin
- */
-export let postAdskLogin = (req: Request, res: Response, next: NextFunction) => {
-  const code = req.body.access_token;
-      // Render for testing purposes
-      res.render("account/signup", {
-        title: "postadsklogin response" + req.body
-      });
 };
 
 /**

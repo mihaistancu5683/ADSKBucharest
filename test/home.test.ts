@@ -2,9 +2,9 @@ import request from "supertest";
 import app from "../src/app";
 
 describe("GET /", () => {
-  it("should return 200 OK", (done) => {
+  it("should return 302 Found", (done) => {
     request(app).get("/")
-      .expect(200)
+      .expect(302)
       .end((err, res) => {
         if (err) {
           done.fail(err);

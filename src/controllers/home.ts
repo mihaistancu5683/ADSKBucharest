@@ -48,8 +48,7 @@ function authStep3 (req: Request, res: Response, body: Object) {
       url: "https://developer.api.autodesk.com/userprofile/v1/users/@me",
       method: "GET",
       headers: {
-        "Authorization": "Bearer " + access_token,
-        "content-type": "application/json"
+        "Authorization": "Bearer " + access_token
       }
     };
     request(options, function (error: Error, response: Response, body2: Body) {

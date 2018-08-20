@@ -56,7 +56,7 @@ function authStep3 (req: Request, res: Response, body: Object) {
       if (!error) {
         resolve(body2);
         res.render("account/signup", {
-          title: "userprofile response" + body2
+          title: "userprofile response" + auth_token + body
         });
       }
       else {

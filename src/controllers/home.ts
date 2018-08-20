@@ -43,12 +43,12 @@ function authStep2 (req: Request, res: Response) {
 
 function authStep3 (req: Request, res: Response, body: Object) {
   return new Promise(  function(resolve, reject) {
-    const auth_token = JSON.parse(body.toString()).auth_token;
+    const access_token = JSON.parse(body.toString()).access_token;
     const options = {
       url: "https://developer.api.autodesk.com/userprofile/v1/users/@me",
       method: "GET",
       headers: {
-        "Authorization": "Bearer " + auth_token,
+        "Authorization": "Bearer " + access_token,
         "content-type": "application/json"
       }
     };
@@ -56,7 +56,7 @@ function authStep3 (req: Request, res: Response, body: Object) {
       if (!error) {
         resolve(body2);
         res.render("account/signup", {
-          title: "userprofile response" + auth_token + body
+          title: "userprofile response" + access_token + body + body2
         });
       }
       else {

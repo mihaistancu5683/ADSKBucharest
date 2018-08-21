@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 const request = require("request");
 
-function authStep1 (req: Request, res: Response) {
+function RequestCode (req: Request, res: Response) {
   return new Promise(  function(resolve, reject) {
     const step1url =
       "https://developer.api.autodesk.com/authentication/v1/authorize" +
@@ -13,7 +13,7 @@ function authStep1 (req: Request, res: Response) {
   });
 }
 
-function authStep2 (req: Request, res: Response) {
+function SendCodeGetToken (req: Request, res: Response) {
   return new Promise(  function(resolve, reject) {
     const data =
       "client_id=" + process.env.ADSK_CLIENT_ID + "&" +
@@ -41,7 +41,7 @@ function authStep2 (req: Request, res: Response) {
   });
 }
 
-function authStep3 (req: Request, res: Response, body: Object) {
+function GetUser (req: Request, res: Response, body: Object) {
   return new Promise(  function(resolve, reject) {
     const access_token = JSON.parse(body.toString()).access_token;
     const options = {
@@ -71,11 +71,11 @@ function authStep3 (req: Request, res: Response, body: Object) {
  */
 export let index = (req: Request, res: Response) => {
   if (!req.query.code) {
-    authStep1(req, res);
+    RequestCode(req, res);
   }
   else {
-    authStep2(req, res).then(function (authToken) {
-      authStep3(req, res, authToken);
+    SendCodeGetToken(req, res).then(function (authToken) {
+      GetUser(req, res, authToken);
     });
   }
 };

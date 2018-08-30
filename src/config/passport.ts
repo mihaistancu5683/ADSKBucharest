@@ -2,14 +2,16 @@ import passport from "passport";
 import request from "request";
 import passportLocal from "passport-local";
 import passportFacebook from "passport-facebook";
+import passportOauth2 from "passport-oauth2";
 import _ from "lodash";
 
 // import { User, UserType } from '../models/User';
-import { default as User } from "../models/User";
+import { default as User, UserModel } from "../models/User";
 import { Request, Response, NextFunction } from "express";
 
 const LocalStrategy = passportLocal.Strategy;
 const FacebookStrategy = passportFacebook.Strategy;
+const OAuth2Strategy = passportOauth2.Strategy;
 
 passport.serializeUser<any, any>((user, done) => {
   done(undefined, user.id);
@@ -119,13 +121,51 @@ passport.use(new FacebookStrategy({
 }));
 
 /**
+ * Sign in with Forge.
+ */
+OAuth2Strategy.prototype.userProfile = function (accessToken, done) {
+  const options = {
+      url: "https://developer.api.autodesk.com/userprofile/v1/users/@me",
+      headers: {
+          "Authorization": "Bearer " + accessToken,
+      }
+  };
+
+  request(options, callback);
+
+  function callback(error: Error, response: any, body: Body) {
+      if (error || response.statusCode !== 200) {
+          return done(error);
+      }
+      const profile = JSON.parse(body.toString());
+      return done(undefined, profile);
+  }
+};
+
+const oauth2_config = {
+  authorizationURL: "https://developer.api.autodesk.com/authentication/v1/authorize",
+  tokenURL: "https://developer.api.autodesk.com/authentication/v1/gettoken",
+  clientID: process.env.ADSK_CLIENT_ID,
+  clientSecret: process.env.ADSK_CLIENT_SECRET,
+  callbackURL: process.env.ADSK_CALLBACK_URI
+};
+
+passport.use(new OAuth2Strategy(oauth2_config,
+function(accessToken: string, refreshToken: string, profile: any, done: Function) {
+  User.find({ exampleId: profile.firstName }, function (err: Error, user: UserModel) {
+    done(err, user);
+  });
+}
+));
+
+/**
  * Login Required middleware.
  */
 export let isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect("/login");
+  res.redirect("/auth/forge");
 };
 
 /**

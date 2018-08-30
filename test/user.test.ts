@@ -9,7 +9,7 @@ const testpass = "TestPassword*9";
 const testnewpass = "TestNewPassword*9";
 
 // Signup should work
-describe("GET /signup", () => {
+describe("GET /auth/local/signup", () => {
   it("should return 200 OK", (done) => {
     request(app).get("/signup")
     .expect(200)
@@ -24,7 +24,7 @@ describe("GET /signup", () => {
 });
 
 // Signup with email + pass should create account
-describe("POST /signup", () => {
+describe("POST /auth/local/signup", () => {
   it("should return 302 Found", (done) => {
     return request(app).post("/signup")
       .field("email", testmail)
@@ -42,7 +42,7 @@ describe("POST /signup", () => {
 });
 
 // Logout should work
-describe("GET /logout", () => {
+describe("GET /auth/logout", () => {
   it("should return 302 Found", (done) => {
     return request(app).get("/logout")
       .expect(302)
@@ -57,7 +57,7 @@ describe("GET /logout", () => {
 });
 
 // Forgot should work
-describe("GET /forgot", () => {
+describe("GET /auth/local/forgot", () => {
   it("should return 200 OK", (done) => {
     request(app).get("/forgot")
     .expect(200)
@@ -72,7 +72,7 @@ describe("GET /forgot", () => {
 });
 
 // Forgot with email
-describe("POST /forgot", () => {
+describe("POST /auth/local/forgot", () => {
   it("should return 302 Found", (done) => {
     return request(app).post("/forgot")
       .field("email", testmail)
@@ -88,7 +88,7 @@ describe("POST /forgot", () => {
 });
 
 // Login should work
-describe("GET /login", () => {
+describe("GET /auth/local/login", () => {
   it("should return 200 OK", (done) => {
     request(app).get("/login")
     .expect(200)
@@ -103,7 +103,7 @@ describe("GET /login", () => {
 });
 
 // Login with email + pass
-describe("POST /login", () => {
+describe("POST /auth/local/login", () => {
   it("should return 302 Found", (done) => {
     return request(app).post("/login")
       .field("email", testmail)
@@ -218,7 +218,7 @@ describe("POST /account/delete", () => {
 });
 
 // Login should not work with account deleted
-describe("POST /login", () => {
+describe("POST /auth/local/login", () => {
   it("should return 302 Found", (done) => {
     return request(app).post("/login")
       .field("email", testmail)

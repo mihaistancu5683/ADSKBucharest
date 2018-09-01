@@ -70,7 +70,7 @@ function GetSimpleDateFromToday(addDays: number): Day {
           if (date.users.length >= parkingSpotsNo) {
             daystatus = BookingStatus.Full;
           }
-          if (-1 !== date.users.indexOf(req.user.id)) {
+          if (-1 !== date.users.indexOf(req.user.userId)) {
             daystatus = BookingStatus.Booked;
           }
         }
@@ -96,7 +96,7 @@ function GetSimpleDateFromToday(addDays: number): Day {
 export let postBooking = (req: Request, res: Response, next: NextFunction) => {
   const newBooking = new BookFP({
     bookDate: req.body.bookDate,
-    users: [req.user.id]
+    users: [req.user.userId]
   });
   BookFP.findOne({bookDate: req.body.bookDate}, (err, existingBookFP: BookingFPModel) => {
     if (err) { return next(err); }
@@ -110,19 +110,19 @@ export let postBooking = (req: Request, res: Response, next: NextFunction) => {
       let userFound: boolean = false;
       let index: number = -1;
       existingBookFP.users.forEach(user => {
-        if (user === req.user.id) {
+        if (user === req.user.userId) {
           userFound = true;
         }
         index++;
       });
       if (userFound) { // User is on the booking list, replace the users array with another that doesn't contain the user
-        const filteredUsers = existingBookFP.users.filter(user => {return user !== req.user.id; });
+        const filteredUsers = existingBookFP.users.filter(user => {return user !== req.user.userId; });
         BookFP.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: filteredUsers} , (err3, resp1: BookingFPModel) => {
           if (err3) { return next(err3); }
         });
       }
       else { // User is not on the booking list, add user to users array (book date)
-        existingBookFP.users.push(req.user.id);
+        existingBookFP.users.push(req.user.userId);
         if (existingBookFP.users.length <= parkingSpotsNo) {
           BookFP.updateOne({bookDate: req.body.bookDate}, {bookDate: req.body.bookDate, users: existingBookFP.users} , (err4, resp2: BookingFPModel) => {
             if (err4) { return next(err4); }

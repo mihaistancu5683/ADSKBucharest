@@ -14,13 +14,11 @@ const FacebookStrategy = passportFacebook.Strategy;
 const OAuth2Strategy = passportOauth2.Strategy;
 
 passport.serializeUser<any, any>((user, done) => {
-  done(undefined, user.id);
+  done(undefined, user);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
+passport.deserializeUser((obj, done) => {
+  done(undefined, obj);
 });
 
 
@@ -151,11 +149,9 @@ const oauth2_config = {
 };
 
 passport.use(new OAuth2Strategy(oauth2_config,
-function(accessToken: string, refreshToken: string, profile: any, done: Function) {
-  User.find({ exampleId: profile.firstName }, function (err: Error, user: UserModel) {
-    done(err, user);
-  });
-}
+  function(accessToken: string, refreshToken: string, profile: any, done: Function) {
+    done(undefined, profile);
+  }
 ));
 
 /**

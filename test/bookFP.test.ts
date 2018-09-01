@@ -20,7 +20,7 @@ describe("GET /bookfp", () => {
 
 
 describe("POST /bookfp", () => {
-  it("should return 302 Found", (done) => {
+  it.skip("should return 302 Found", (done) => {
 
     // Need a user in order to book a parking spot
     request(app).post("/signup")

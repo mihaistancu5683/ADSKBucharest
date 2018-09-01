@@ -90,37 +90,37 @@ app.use(
 /**
  * Primary app routes.
  */
-app.get("/", passportConfig.isAuthenticated, homeController.index);
-app.get("/auth/local/login", userController.getLogin);
-app.post("/auth/local/login", userController.postLogin);
+app.get("/", homeController.index);
+// app.get("/auth/local/login", userController.getLogin);
+// app.post("/auth/local/login", userController.postLogin);
 app.get("/auth/logout", userController.logout);
-app.get("/auth/local/forgot", userController.getForgot);
-app.post("/auth/local/forgot", userController.postForgot);
-app.get("/auth/local/reset/:token", userController.getReset);
-app.post("/auth/local/reset/:token", userController.postReset);
-app.get("/auth/local/signup", userController.getSignup);
-app.post("/auth/local/signup", userController.postSignup);
+// app.get("/auth/local/forgot", userController.getForgot);
+// app.post("/auth/local/forgot", userController.postForgot);
+// app.get("/auth/local/reset/:token", userController.getReset);
+// app.post("/auth/local/reset/:token", userController.postReset);
+// app.get("/auth/local/signup", userController.getSignup);
+// app.post("/auth/local/signup", userController.postSignup);
 app.get("/bookfp", passportConfig.isAuthenticated, bookFPController.getBookings);
 app.post("/bookfp", passportConfig.isAuthenticated, bookFPController.postBooking);
 app.get("/account", passportConfig.isAuthenticated, userController.getAccount);
 app.post("/account/profile", passportConfig.isAuthenticated, userController.postUpdateProfile);
 app.post("/account/password", passportConfig.isAuthenticated, userController.postUpdatePassword);
-app.post("/account/delete", passportConfig.isAuthenticated, userController.postDeleteAccount);
-app.get("/account/unlink/:provider", passportConfig.isAuthenticated, userController.getOauthUnlink);
+// app.post("/account/delete", passportConfig.isAuthenticated, userController.postDeleteAccount);
+// app.get("/account/unlink/:provider", passportConfig.isAuthenticated, userController.getOauthUnlink);
 
 /**
  * API examples routes.
  */
-app.get("/api", apiController.getApi);
-app.get("/api/facebook", passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFacebook);
+// app.get("/api", apiController.getApi);
+// app.get("/api/facebook", passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFacebook);
 
 /**
  * OAuth authentication routes. (Sign in)
  */
-app.get("/auth/facebook", passport.authenticate("facebook", { scope: ["email", "public_profile"] }));
-app.get("/auth/facebook/callback", passport.authenticate("facebook", { failureRedirect: "/login" }), (req, res) => {
-  res.redirect(req.session.returnTo || "/");
-});
+// app.get("/auth/facebook", passport.authenticate("facebook", { scope: ["email", "public_profile"] }));
+// app.get("/auth/facebook/callback", passport.authenticate("facebook", { failureRedirect: "/login" }), (req, res) => {
+//   res.redirect(req.session.returnTo || "/");
+// });
 
 /**
  * Forge oauth2

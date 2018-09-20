@@ -1,4 +1,4 @@
-FROM node:8.9.1-alpine
+FROM node:10.10.0-alpine
 
 # Set the current working directory to the new mapped folder.
 WORKDIR /usr/src/app

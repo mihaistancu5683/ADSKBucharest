@@ -6,58 +6,39 @@ const expect = chai.expect;
 
 describe("GET /bookfp", () => {
   it("should return 302 Found", (done) => {
-    request(app).get("/bookfp")
+    request(app)
+      .get("/bookfp")
+      .set("Accept", "application/json")
       .expect(302)
       .end((err, res) => {
-        if (err) {
-          done.fail(err);
-        } else {
-          done();
-        }
+        if (err) return done(err);
+        done();
       });
   });
 });
 
-
 describe("POST /bookfp", () => {
-  it.skip("should return 302 Found", (done) => {
-
-    // Need a user in order to book a parking spot
-    request(app).post("/signup")
-      .field("email", "Parking@user.com")
-      .field("password", "testpass")
-      .field("confirmPassword", "testpass")
-      .expect(302)
-      .end((err, res) => {
-        if (err) {
-          done.fail(err);
-        } else {
-          done();
-        }
-      });
-
+  it("should return 302 Found", (done) => {
     // Book parking spot
-    request(app).post("/bookfp")
-      .field("bookDate", "09/07/2018")
+    request(app)
+      .post("/bookfp")
+      .send({ bookDate: "09/07/2018" })
+      .set("Accept", "application/json")
       .expect(302)
       .end((err, res) => {
-        if (err) {
-          done.fail(err);
-        } else {
-          done();
-        }
+        if (err) return done(err);
+        done();
       });
 
-    // Cancel previous booking
-    request(app).post("/bookfp")
-    .field("bookDate", "09/07/2018")
-    .expect(302)
-    .end((err, res) => {
-      if (err) {
-        done.fail(err);
-      } else {
+  // Cancel booking
+    request(app)
+      .post("/bookfp")
+      .send({ bookDate: "09/07/2018" })
+      .set("Accept", "application/json")
+      .expect(302)
+      .end((err, res) =>  {
+        if (err) return done(err);
         done();
-      }
-    });
+      });
   });
 });

@@ -3,14 +3,13 @@ import app from "../src/app";
 
 describe("GET /", () => {
   it("should return 200 Ok", (done) => {
-    request(app).get("/")
+    request(app)
+      .get("/")
+      .set("Accept", "application/json")
       .expect(200)
       .end((err, res) => {
-        if (err) {
-          done.fail(err);
-        } else {
-          done();
-        }
+        if (err) return done(err);
+        done();
       });
   });
 });

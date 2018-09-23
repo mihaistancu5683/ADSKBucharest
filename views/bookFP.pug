@@ -12,8 +12,8 @@ block content
             input(type="hidden",name="bookDate",value=item.date)
           .col-sm-offset-2.col-sm-8
             if item.status == 1
-              button.btn.btn-success(type="submit") #{item.fulldate}
+              button.btn.btn-success(type="submit", data-toggle="tooltip", data-placement="right", title=item.usersExploded) #{item.fulldate}
             else if item.status == 0
-              button.btn.btn-primary(type="submit") #{item.fulldate}
+              button.btn.btn-primary(type="submit", data-toggle="tooltip", data-placement="right", title=item.usersExploded) #{item.fulldate}
             else
-              button.btn.btn-danger(type="submit" disabled) #{item.fulldate}
+              button.btn.btn-danger(type="submit", data-toggle="tooltip", data-placement="right", title=item.usersExploded disabled) #{item.fulldate}

@@ -43,6 +43,7 @@ const Utilities = (function() {
 
     nextWeek.forEach(day => {
       let daystatus: BookingStatus = BookingStatus.Available;
+      let usersExploded: string = "";
       bookingsStartingToday.forEach(booking => {
         if (day.date === booking.bookDate) {
           if (booking.users.length >= parkingSpotsNo) {
@@ -51,12 +52,16 @@ const Utilities = (function() {
           if (-1 !== booking.users.indexOf(req.user.emailId)) {
             daystatus = BookingStatus.Booked;
           }
+          booking.users.forEach(userMail => {
+            usersExploded += userMail + "\n";
+          });
         }
       });
       const item: RespItem = {
         fulldate: day.name + " " + day.date,
         date: day.date,
-        status: daystatus
+        status: daystatus,
+        usersExploded: usersExploded
       };
       response.push(item);
     });

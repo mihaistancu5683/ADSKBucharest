@@ -11,6 +11,7 @@ export class RespItem {
   date: string;
   fulldate: string;
   status: BookingStatus;
+  usersExploded: string;
 }
 
 export default {

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { default as Utilities } from "../util/Utilities";
+import { default as Utilities } from "../util/utilities";
 import { default as Db } from "../util/db";
 const parkingSpotsNo = 5;
 

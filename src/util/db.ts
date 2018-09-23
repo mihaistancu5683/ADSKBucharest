@@ -28,11 +28,11 @@ const Db = (function() {
         });
     };
 
-    const SaveBookFPDate = (bookDate: Day, userId: string): Promise<any> => {
+    const SaveBookFPDate = (bookDate: Day, emailId: string): Promise<any> => {
         return new Promise<any> ((resolve, reject) => {
             const newBooking = new BookFP({
                 bookDate: bookDate,
-                users: [userId]
+                users: [emailId]
             });
             newBooking.save((err) => {
             if (err) {

@@ -26,17 +26,17 @@ export let postBooking = (req: Request, res: Response, next: NextFunction) => {
   Db.CheckIfDateIsBooked(req.body.bookDate)
     .then(existingFPBook => {
       if (!existingFPBook) {
-        Db.SaveBookFPDate(req.body.bookDate, req.user.userId);
+        Db.SaveBookFPDate(req.body.bookDate, req.user.emailId);
       }
       else {
-        const userFound = Utilities.IsCurrentUserInFPBookingArray(req.user.userId, existingFPBook);
+        const userFound = Utilities.IsCurrentUserInFPBookingArray(req.user.emailId, existingFPBook);
         if (userFound) {
-          const updatedUsersArray = existingFPBook.users.filter(user => {return user !== req.user.userId; });
+          const updatedUsersArray = existingFPBook.users.filter(user => {return user !== req.user.emailId; });
           Db.UpdateBookFP(req.body.bookDate, updatedUsersArray);
         }
         else {
           if (existingFPBook.users.length <= parkingSpotsNo - 1) {
-            existingFPBook.users.push(req.user.userId);
+            existingFPBook.users.push(req.user.emailId);
             Db.UpdateBookFP(req.body.bookDate, existingFPBook.users);
           }
           else {

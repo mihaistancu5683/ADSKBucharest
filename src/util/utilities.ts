@@ -48,7 +48,7 @@ const Utilities = (function() {
           if (booking.users.length >= parkingSpotsNo) {
             daystatus = BookingStatus.Full;
           }
-          if (-1 !== booking.users.indexOf(req.user.userId)) {
+          if (-1 !== booking.users.indexOf(req.user.emailId)) {
             daystatus = BookingStatus.Booked;
           }
         }
@@ -64,10 +64,10 @@ const Utilities = (function() {
     return response;
   };
 
-  const IsCurrentUserInFPBookingArray = function (userId: string, existingFPBook: BookingFPModel): boolean {
+  const IsCurrentUserInFPBookingArray = function (emailId: string, existingFPBook: BookingFPModel): boolean {
     let userFound: boolean = false;
-    existingFPBook.users.forEach(id => {
-      if (id === userId) {
+    existingFPBook.users.forEach(mail => {
+      if (mail === emailId) {
         userFound = true;
       }
     });

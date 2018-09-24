@@ -1,5 +1,18 @@
 import { default as BookFP, BookingFPModel } from "../models/BookFP";
+import { default as Config, ConfigModel } from "../models/Config";
 import { Day } from "./classes";
+
+const defaultConfig = {
+    parkingSpotsNoFP: 5,
+    PPassignments: [{
+        spot: 11,
+        name: "testuser1@something.com"
+    },
+    {
+        spot: 12,
+        name: "testuser2@something.com"
+    }]
+};
 
 const Db = (function() {
     const GetFPBookingsStartingToday = (todayDate: Day): Promise<BookingFPModel[]> => {
@@ -58,11 +71,38 @@ const Db = (function() {
         });
     };
 
+    const GetConfig = (): Promise<ConfigModel> => {
+        return new Promise<ConfigModel> ((resolve, reject) => {
+            Config.findOne({parkingSpotsNoFP: { $gte : 1 }}, (err: Error, config: ConfigModel) => {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    if (config == undefined) {
+                        const initial = new Config(defaultConfig);
+                        initial.save((err) => {
+                            if (err) {
+                                reject(err);
+                            }
+                            else {
+                                resolve();
+                            }
+                        });
+                    }
+                    else {
+                        resolve(config);
+                    }
+                }
+            });
+        });
+    };
+
     return {
         GetFPBookingsStartingToday: GetFPBookingsStartingToday,
         CheckIfDateIsBooked: CheckIfDateIsBooked,
         SaveBookFPDate: SaveBookFPDate,
-        UpdateBookFP: UpdateBookFP
+        UpdateBookFP: UpdateBookFP,
+        GetConfig: GetConfig
     };
 })();
 export default Db;

@@ -4,12 +4,12 @@ export enum BookingStatus {
     Full
 }
 export class Day {
-  date: string; // e.g.: 01/01/1970
-  name: string; // e.g.: Thu
+  internalDate: Date; // e.g.: 2018-09-24 21:00:00.000Z
+  userDate: string; // e.g.: Thu 26/9/2018
 }
 export class RespItem {
-  date: string;
-  fulldate: string;
+  internalDate: Date;
+  userDate: string;
   status: BookingStatus;
   usersExploded: string;
 }

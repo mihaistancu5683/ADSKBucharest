@@ -10,28 +10,16 @@ const Utilities = (function () {
   const weekday = new Array("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
 
   const GetSimpleDateFromToday = function (addDays: number): Day {
-    const today = new Date(new Date().getTime() + addDays * 24 * 60 * 60 * 1000);
-    const idx = today.getDay();
-    const dd_tmp = today.getDate();
-    const mm_tmp = today.getMonth() + 1; // January is 0!
-    const yyyy = today.getFullYear();
-    let dd, mm: string;
-
-    if (dd_tmp < 10) {
-      dd = "0" + dd_tmp.toString();
-    }
-    else {
-      dd = dd_tmp.toString();
-    }
-    if (mm_tmp < 10) {
-      mm = "0" + mm_tmp.toString();
-    }
-    else {
-      mm = mm_tmp.toString();
-    }
+    const today = new Date(new Date().getTime() + addDays * 24 * 60 * 60 * 1000); // Tue Sep 25 2018 22:23:40 GMT+0030 (Eastern...)
+    const dn = weekday[today.getDay()];
+    const dd = today.getDate(); // 25
+    const mm = today.getMonth() + 1; // 9 - January is 0!
+    const yyyy = today.getFullYear(); // 2018
+    const justDate = new Date(yyyy, mm - 1, dd);
+    const prettyToday = `${dn} ${dd}/${mm}/${yyyy}`;
     const day = new Day();
-    day.date = dd + "/" + mm + "/" + yyyy.toString();
-    day.name = weekday[idx];
+    day.internalDate = justDate; // 26/9/2018
+    day.userDate = prettyToday; // Thu 26/9/2018
     return day;
   };
 
@@ -48,7 +36,7 @@ const Utilities = (function () {
         let daystatus: BookingStatus = BookingStatus.Available;
         let usersExploded: string = "";
         bookingsStartingToday.forEach(booking => {
-          if (day.date === booking.bookDate) {
+          if (day.internalDate.getTime() === booking.bookDate.getTime()) {
             if (booking.users.length >= config.parkingSpotsNoFP) {
               daystatus = BookingStatus.Full;
             }
@@ -61,8 +49,8 @@ const Utilities = (function () {
           }
         });
         const item: RespItem = {
-          fulldate: day.name + " " + day.date,
-          date: day.date,
+          userDate: day.userDate,
+          internalDate: day.internalDate,
           status: daystatus,
           usersExploded: usersExploded
         };

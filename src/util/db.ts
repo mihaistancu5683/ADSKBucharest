@@ -17,7 +17,7 @@ const defaultConfig = {
 const Db = (function() {
     const GetFPBookingsStartingToday = (todayDate: Day): Promise<BookingFPModel[]> => {
         return new Promise<BookingFPModel[]> ((resolve, reject) => {
-            BookFP.find({bookDate: { $gte : todayDate.date }}, (err, bookingsStartingToday: BookingFPModel[]) => {
+            BookFP.find({bookDate: { $gte : todayDate.internalDate }}, (err, bookingsStartingToday: BookingFPModel[]) => {
                 if (err) {
                     reject(err);
                 }

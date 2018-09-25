@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
 export type BookingFPModel = mongoose.Document & {
-  bookDate: string,
+  bookDate: Date,
   users: [string]
 };
 
 const bookingFPSchema = new mongoose.Schema({
-  bookDate: String,
+  bookDate: Date,
   users: [String]
 }, { timestamps: true });
 

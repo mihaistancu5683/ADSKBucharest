@@ -2,7 +2,7 @@ import { Day } from "./classes";
 import { Request, Response, NextFunction } from "express";
 import { BookingFPModel } from "../models/BookFP";
 import { ConfigModel } from "../models/Config";
-import { BookingStatus, RespItem } from "./classes";
+import { BookingFPStatus, BookFPRespItem } from "./classes";
 import { default as Db } from "../util/db";
 import { resolve } from "dns";
 
@@ -18,14 +18,14 @@ const Utilities = (function () {
     const justDate = new Date(yyyy, mm - 1, dd);
     const prettyToday = `${dn} ${dd}/${mm}/${yyyy}`;
     const day = new Day();
-    day.internalDate = justDate; // 26/9/2018
+    day.internalDate = justDate; // 2018-09-24 21:00:00.000Z
     day.userDate = prettyToday; // Thu 26/9/2018
     return day;
   };
 
-  const ProcessFPDayByDay = function(req: Request, config: ConfigModel, bookingsStartingToday: BookingFPModel[]): Promise<RespItem[]> {
-    return new Promise<RespItem[]> ((resolve, reject) => {
-      const response: RespItem[] = [];
+  const ProcessFPDayByDay = function(req: Request, config: ConfigModel, bookingsStartingToday: BookingFPModel[]): Promise<BookFPRespItem[]> {
+    return new Promise<BookFPRespItem[]> ((resolve, reject) => {
+      const response: BookFPRespItem[] = [];
       const nextWeek: Day[] = [];
       for (let i = 0; i <= 6; i++) {
         const day = Utilities.GetSimpleDateFromToday(i);
@@ -33,22 +33,22 @@ const Utilities = (function () {
       }
 
       nextWeek.forEach(day => {
-        let daystatus: BookingStatus = BookingStatus.Available;
+        let daystatus: BookingFPStatus = BookingFPStatus.Available;
         let usersExploded: string = "";
         bookingsStartingToday.forEach(booking => {
           if (day.internalDate.getTime() === booking.bookDate.getTime()) {
             if (booking.users.length >= config.parkingSpotsNoFP) {
-              daystatus = BookingStatus.Full;
+              daystatus = BookingFPStatus.Full;
             }
             if (-1 !== booking.users.indexOf(req.user.emailId)) {
-              daystatus = BookingStatus.Booked;
+              daystatus = BookingFPStatus.Booked;
             }
             booking.users.forEach(userMail => {
               usersExploded += userMail + "\n";
             });
           }
         });
-        const item: RespItem = {
+        const item: BookFPRespItem = {
           userDate: day.userDate,
           internalDate: day.internalDate,
           status: daystatus,
@@ -60,8 +60,8 @@ const Utilities = (function () {
     });
   };
 
-  const CreateFPResponse = function (req: Request, bookingsStartingToday: BookingFPModel[]): Promise<RespItem[]> {
-    return new Promise<RespItem[]> ((resolve, reject) => {
+  const CreateFPResponse = function (req: Request, bookingsStartingToday: BookingFPModel[]): Promise<BookFPRespItem[]> {
+    return new Promise<BookFPRespItem[]> ((resolve, reject) => {
       Db.GetConfig().then(config => {
         return Utilities.ProcessFPDayByDay(req, config, bookingsStartingToday);
       }).then(response => {

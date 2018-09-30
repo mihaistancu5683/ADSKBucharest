@@ -1,8 +1,8 @@
-import { Day } from "./classes";
+import { BookingFPStatus, BookFPRespItem } from "../interfaces/interfaces";
+import Day from "../classes/day";
 import { Request, Response, NextFunction } from "express";
 import { BookingFPModel } from "../models/BookFP";
 import { ConfigModel } from "../models/Config";
-import { BookingFPStatus, BookFPRespItem } from "./classes";
 import { default as Db } from "../util/db";
 import { resolve } from "dns";
 

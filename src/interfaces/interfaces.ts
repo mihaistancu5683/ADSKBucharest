@@ -3,23 +3,21 @@ export enum BookingFPStatus {
     Booked,
     Full
 }
+
 export enum BookingPPStatus {
   BookedByOwner,
   Available,
   BookedByOther
 }
-export class Day {
-  internalDate: Date; // e.g.: 2018-09-24 21:00:00.000Z
-  userDate: string; // e.g.: Thu 26/9/2018
-}
-export class BookFPRespItem {
+
+export interface BookFPRespItem {
   internalDate: Date; // e.g.: 2018-09-24 21:00:00.000Z
   userDate: string; // e.g.: Thu 26/9/2018
   status: BookingFPStatus;
   usersExploded: string;
 }
 
-export class BookPPRespItem {
+export interface BookPPRespItem {
   internalDate: Date;
   userDate: string;
   status: BookingPPStatus;
@@ -28,9 +26,6 @@ export class BookPPRespItem {
 }
 
 export default {
-  Day,
   BookingFPStatus,
   BookingPPStatus,
-  BookFPRespItem,
-  BookPPRespItem
 };

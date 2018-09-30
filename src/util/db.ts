@@ -1,6 +1,6 @@
 import { default as BookFP, BookingFPModel } from "../models/BookFP";
 import { default as Config, ConfigModel } from "../models/Config";
-import { Day } from "./classes";
+import Day from "../classes/day";
 
 const defaultConfig = {
     parkingSpotsNoFP: 5,

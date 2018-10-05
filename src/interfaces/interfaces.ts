@@ -1,3 +1,7 @@
+import Day from "../classes/day";
+import { BookingFPModel } from "../models/BookFP";
+import { ConfigModel } from "../models/Config";
+
 export enum BookingFPStatus {
     Available,
     Booked,
@@ -29,3 +33,11 @@ export default {
   BookingFPStatus,
   BookingPPStatus,
 };
+
+export interface IRepository {
+  GetFPBookingsStartingToday(todayDate: Day): Promise<BookingFPModel[]>;
+  CheckIfDateIsBooked(bookDate: Day): Promise<BookingFPModel>;
+  SaveBookFPDate(bookDate: Day, emailId: string): Promise<any>;
+  UpdateBookFP(bookDate: Day, users: string[]): Promise<any>;
+  GetConfig(): Promise<ConfigModel>;
+}

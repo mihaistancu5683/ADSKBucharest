@@ -1,21 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import { default as Utilities } from "../util/utilities";
-import { default as Db } from "../util/db";
+import {default as MongoDbRepository } from "../classes/repository";
+import {default as BookFPController } from "../classes/bookFP";
 
 /**
  * GET /bookfp
  * Book parking form page.
  */export let getBookings = (req: Request, res: Response) => {
-    const todayDate = Utilities.GetSimpleDateFromToday(0);
-
-    Db.GetFPBookingsStartingToday(todayDate)
-      .then(bookingsStartingToday => Utilities.CreateFPResponse(req, bookingsStartingToday))
-      .then(FPresponse => {
-        res.render("bookFP", {
-          title: "Book fast parking spot",
-          content: FPresponse
-        });
-      });
+    const repo = new MongoDbRepository();
+    const controller = new BookFPController(repo);
+    const ret1 = controller.OnGet(req, res);
   };
 
 /**
@@ -23,6 +16,8 @@ import { default as Db } from "../util/db";
  * Send a bookdate to db.
  */
 export let postBooking = (req: Request, res: Response, next: NextFunction) => {
-  Db.CheckIfDateIsBooked(req.body.bookDate)
-    .then(existingFPBook => Utilities.ProcessFPRequest(req, res, next, existingFPBook));
+  const repo = new MongoDbRepository();
+  const controller = new BookFPController(repo);
+  const ret2 = controller.OnPost(req, res, next);
+
 };

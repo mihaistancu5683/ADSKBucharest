@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import {default as MongoDbRepository } from "../classes/repository";
-import {default as BookFPController } from "../classes/bookFP";
+import { default as MongoDbRepository } from "../classes/repository";
+import { default as BookFPController } from "../classes/bookFP";
 
 /**
  * GET /bookfp

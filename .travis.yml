@@ -5,14 +5,14 @@ services:
 - docker
 - mongodb
 before_deploy:
-  - "npm install"
-  - "npm run build"
-  - "npm run test"
+- npm install
+- npm run build
+- npm run test
 deploy:
   provider: heroku
   skip_cleanup: true
   api_key:
-    secure: WK7KOy3+TbiOkRbCH6KHfXdWin77iiu3pH8XvWo7B0hmm0JnGBWuV+I/o1XHj0cld78m8GC6PwvZcFd/84nfrRe0N0HWsMyrHSaUMvIg5B4Ie0lJmfBD6mmZgy5NXw/20tuc29VZQwyeDFrY75isdAgmQitH8OfZe5AjTJjRMnlvmsPiAOzmlhBKb34J6hOkWiogK/NXQ+wznxM6QZA65QT9pQnAw+WQ5ZLL20lYsv8FNd36lM3Hok8esVDUDIgS/zE/I7Kw/lR1VtzlyRVBbFTUkd+Ps6Ri0/+1C4bspCYL0u7Y+zXwX68tV37KO+PzkRr2ikXFk32SmmgRLxua5l3MlRy4JKZsgbBtMTPM6syEl6N44uPKbIck5PQxaV3pqmBSlhYp6FpeDmhyEC3i1cZIIlGEc4HrCLxtGjAzValxm8AwAWTBeYa0e7CsUmKxsGtWNWqGfbaJftK0PFgzOdnJURXz2oJpNHk9hVYODgbsAHy0a6/k+TpFV5JQ+0RUEermII+YFBKdM/ZsoLYy0kRk5pSg8k/Z1dMtZWDtci8bP3Cvq7VzIrDXdnpD3qfFlwf0mG9XHRr6Vr7mPYCNjtd8H4UIu8ZgZkgTO52CxxsYMjKk6sK0IrDkSZmJrC2QTSrYWpLhEBz62E/DmIsv3i6kc7LFFeokyVR5KGdXCdk=
+    secure: H2jXKktp2inr8JAi4qQOHramv3711jBjwfGFSVQyJs5KzgJYAqtoXEnvEv6l4AGoUk95v39/8xrqSa7SMhJVHAETGMKK0HJYBNyawPG6tiYy1H8fIoNMg4a8bLz7j2ZkEPHZqsoySHODcw2cW+cvS8ALNpr3YyojjsmyPuV0x2+qNdcO7NPBzAFXATdNn8UcVtFTZwL+snlNenPtDzE5hKwV8wHWj4NDc07s86cBO1zUIIXgA2FU5ZrUlNxQx3OUg9BOeY+VDXwKhTKQgSISIX0jPcWMM3+XC44Sv5Faq4trSJZfxXv0zidXmrzkOJGXR+XmAVOjPbYOaTUFIxg360fPM7/fkqh9dPlvaJgu2NaZeMeGjaKNjcJYSrqDbg5ifikasHqNeUFX3Je3UOe71QAiQ7MpFpBA/bpCRTzRTG2Wd2o1yG46TnX88GKebWwWh7ZBRRk4CFlLl5691wsQD3BvbtCMsEr/oCGZvUjhBr1NXxAOZOYtvERsJvrPC+8dpczl9ZNb1IaJe+VerpZ/e0mFZjneYuamq8AeWGVSReT3OgjYdZVl756IUAeMWNh5GUNu/SUizPcpvJtGL/BeUVonIOe5EIjLArcwm/93F2W0Z8/mJFcTRro6JnkJBuPi36HPq6z0X4WPnSIOqIkYrXR2QkSIRBSRQ4i08PtPFpw=
   app: adsk-bucharest
   on:
     repo: stancu-mihai/ADSKBucharest

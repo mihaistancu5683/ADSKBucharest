@@ -30,6 +30,26 @@ export type AuthToken = {
   kind: string
 };
 
+export interface IUser extends mongoose.Document {
+  email: { type: string, unique: boolean };
+  password: string;
+  passwordResetToken: string;
+  passwordResetExpires: Date;
+
+  facebook: string;
+  twitter: string;
+  google: string;
+  tokens: Array<string>;
+
+  profile: {
+    name: string,
+    gender: string,
+    location: string,
+    website: string,
+    picture: string
+  };
+}
+
 const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: String,
@@ -53,7 +73,7 @@ const userSchema = new mongoose.Schema({
 /**
  * Password hash middleware.
  */
-userSchema.pre("save", function save(next: Function) {
+userSchema.pre<IUser>("save", function save(next: Function) {
   const user = this;
   if (!user.isModified("password")) { return next(); }
   bcrypt.genSalt(10, (err, salt) => {
@@ -89,5 +109,5 @@ userSchema.methods.gravatar = function (size: number) {
 };
 
 // export const User: UserType = mongoose.model<UserType>('User', userSchema);
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model<IUser>("User", userSchema);
 export default User;
